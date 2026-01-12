@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Serif+Arabic:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -134,4 +134,37 @@ input[type="number"] {
 ::selection {
   background: #FF6B57;
   color: white;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', 'Outfit', system-ui, sans-serif;
+}
+
+[dir="rtl"] .font-display {
+  font-family: 'Noto Serif Arabic', 'Playfair Display', serif;
+}
+
+/* RTL specific adjustments */
+[dir="rtl"] .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+[dir="rtl"] .stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+[dir="rtl"] .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+[dir="rtl"] .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+[dir="rtl"] .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+[dir="rtl"] .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+[dir="rtl"] .stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+[dir="rtl"] .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+[dir="rtl"] .stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
+[dir="rtl"] .stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
+
+/* RTL slide animation fix */
+[dir="rtl"] @keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

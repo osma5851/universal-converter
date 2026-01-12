@@ -1,6 +1,8 @@
 'use client';
 
 import { Unit } from '@/lib/units';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getUnitName } from '@/lib/translations';
 import { ChevronDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
@@ -19,6 +21,7 @@ export default function UnitSelector({
 }: UnitSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { language, isRTL } = useLanguage();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,12 +45,13 @@ export default function UnitSelector({
           w-full flex items-center justify-between px-4 py-3 
           bg-white/80 hover:bg-white rounded-xl border-2 
           transition-all duration-200 text-left
+          ${isRTL ? 'text-right' : 'text-left'}
           ${isOpen ? 'border-coral-400 shadow-medium' : 'border-transparent shadow-soft hover:shadow-medium'}
         `}
       >
         <div>
-          <span className="font-medium text-slate-800">{selectedUnit.name}</span>
-          <span className="ml-2 text-coral-500 font-semibold">({selectedUnit.symbol})</span>
+          <span className="font-medium text-slate-800">{getUnitName(language, selectedUnit.id)}</span>
+          <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-coral-500 font-semibold`}>({selectedUnit.symbol})</span>
         </div>
         <ChevronDown 
           size={20} 
@@ -66,15 +70,16 @@ export default function UnitSelector({
                   setIsOpen(false);
                 }}
                 className={`
-                  w-full px-4 py-3 text-left transition-all duration-150
+                  w-full px-4 py-3 transition-all duration-150
                   flex items-center justify-between
+                  ${isRTL ? 'text-right' : 'text-left'}
                   ${unit.id === selectedUnit.id 
                     ? 'bg-coral-50 text-coral-600' 
                     : 'hover:bg-cream-100 text-slate-700'
                   }
                 `}
               >
-                <span className="font-medium">{unit.name}</span>
+                <span className="font-medium">{getUnitName(language, unit.id)}</span>
                 <span className={`text-sm ${unit.id === selectedUnit.id ? 'text-coral-500' : 'text-slate-400'}`}>
                   {unit.symbol}
                 </span>

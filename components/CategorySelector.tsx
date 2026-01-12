@@ -1,6 +1,8 @@
 'use client';
 
 import { Category } from '@/lib/units';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getCategoryName } from '@/lib/translations';
 import {
   Ruler,
   Scale,
@@ -39,10 +41,12 @@ export default function CategorySelector({
   selectedCategory,
   onSelect,
 }: CategorySelectorProps) {
+  const { language, t } = useLanguage();
+
   return (
     <div className="w-full">
       <h2 className="text-sm font-medium text-slate-500 mb-4 uppercase tracking-wider">
-        Categories
+        {t('categories')}
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-3 stagger-children">
         {categories.map((category, index) => {
@@ -68,7 +72,7 @@ export default function CategorySelector({
                 className={`mb-2 transition-transform duration-300 ${isSelected ? 'animate-float' : 'group-hover:scale-110'}`} 
               />
               <span className="text-xs font-medium text-center leading-tight">
-                {category.name}
+                {getCategoryName(language, category.id)}
               </span>
               {isSelected && (
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-coral-500 rounded-full" />

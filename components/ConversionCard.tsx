@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Category, Unit, convert, formatNumber } from '@/lib/units';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getCategoryName } from '@/lib/translations';
 import UnitSelector from './UnitSelector';
 import { ArrowRightLeft, Copy, Check, RotateCcw } from 'lucide-react';
 
@@ -15,6 +17,7 @@ export default function ConversionCard({ category }: ConversionCardProps) {
   const [fromValue, setFromValue] = useState<string>('1');
   const [result, setResult] = useState<string>('');
   const [copied, setCopied] = useState(false);
+  const { language, t, isRTL } = useLanguage();
 
   useEffect(() => {
     // Reset units when category changes
@@ -63,44 +66,46 @@ export default function ConversionCard({ category }: ConversionCardProps) {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-display font-semibold text-slate-800">
-              {category.name} Converter
+              {getCategoryName(language, category.id)} {t('converter')}
             </h2>
             <p className="text-slate-500 text-sm mt-1">
-              Convert between {category.units.length} different units
+              {t('convertBetween')} {category.units.length} {t('differentUnits')}
             </p>
           </div>
           <button
             onClick={handleReset}
             className="p-2 rounded-xl bg-cream-100 hover:bg-cream-200 text-slate-500 hover:text-slate-700 transition-all duration-200"
-            title="Reset"
+            title={t('reset')}
           >
             <RotateCcw size={20} />
           </button>
         </div>
 
         {/* Conversion Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] gap-6 items-end">
+        <div className={`grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] gap-6 items-end ${isRTL ? 'lg:grid-cols-[1fr,auto,1fr]' : ''}`}>
           {/* From Section */}
           <div className="space-y-4">
             <UnitSelector
               units={category.units}
               selectedUnit={fromUnit}
               onSelect={setFromUnit}
-              label="From"
+              label={t('from')}
             />
             <div className="relative">
               <input
                 type="number"
                 value={fromValue}
                 onChange={(e) => setFromValue(e.target.value)}
-                placeholder="Enter value"
-                className="w-full px-4 py-4 text-2xl font-semibold text-slate-800 
+                placeholder={t('enterValue')}
+                dir="ltr"
+                className={`w-full px-4 py-4 text-2xl font-semibold text-slate-800 
                          bg-white rounded-xl border-2 border-transparent
                          shadow-soft focus:shadow-medium focus:border-coral-400
                          outline-none transition-all duration-200
-                         placeholder:text-slate-300"
+                         placeholder:text-slate-300
+                         ${isRTL ? 'text-right pr-4 pl-16' : 'text-left pl-4 pr-16'}`}
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-coral-500 font-medium">
+              <span className={`absolute top-1/2 -translate-y-1/2 text-coral-500 font-medium ${isRTL ? 'left-4' : 'right-4'}`}>
                 {fromUnit.symbol}
               </span>
             </div>
@@ -114,7 +119,7 @@ export default function ConversionCard({ category }: ConversionCardProps) {
                        text-white shadow-glow hover:shadow-lg 
                        hover:scale-110 active:scale-95
                        transition-all duration-200"
-              title="Swap units"
+              title={t('swapUnits')}
             >
               <ArrowRightLeft size={24} />
             </button>
@@ -126,17 +131,18 @@ export default function ConversionCard({ category }: ConversionCardProps) {
               units={category.units}
               selectedUnit={toUnit}
               onSelect={setToUnit}
-              label="To"
+              label={t('to')}
             />
             <div className="relative group">
-              <div className="w-full px-4 py-4 text-2xl font-semibold 
+              <div className={`w-full px-4 py-4 text-2xl font-semibold 
                             bg-gradient-to-br from-sage-400/10 to-sage-500/10 
                             rounded-xl border-2 border-sage-400/30
-                            min-h-[68px] flex items-center justify-between">
-                <span className={`${result ? 'text-slate-800' : 'text-slate-300'}`}>
-                  {result || 'Result'}
+                            min-h-[68px] flex items-center justify-between
+                            ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <span className={`${result ? 'text-slate-800' : 'text-slate-300'}`} dir="ltr">
+                  {result || t('result')}
                 </span>
-                <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span className="text-sage-600 font-medium">
                     {toUnit.symbol}
                   </span>
@@ -147,7 +153,7 @@ export default function ConversionCard({ category }: ConversionCardProps) {
                                text-slate-400 hover:text-sage-600
                                opacity-0 group-hover:opacity-100
                                transition-all duration-200"
-                      title="Copy result"
+                      title={t('copyResult')}
                     >
                       {copied ? <Check size={18} /> : <Copy size={18} />}
                     </button>
@@ -161,7 +167,7 @@ export default function ConversionCard({ category }: ConversionCardProps) {
         {/* Conversion Formula */}
         {result && fromValue && (
           <div className="mt-8 pt-6 border-t border-cream-200">
-            <p className="text-center text-slate-500">
+            <p className="text-center text-slate-500" dir="ltr">
               <span className="font-semibold text-coral-500">{fromValue}</span>
               <span className="mx-1">{fromUnit.symbol}</span>
               <span className="mx-2">=</span>
